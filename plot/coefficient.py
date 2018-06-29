@@ -43,7 +43,7 @@ def visualize_classification(coefficients, feature_names, n_top_features=25, **k
 	negative_coefficients = np.argsort(coef)[:n_top_features]
 	interesting_coefficients = np.hstack([negative_coefficients, positive_coefficients])
 
-	# mlplot them
+	# plot them
 	plt.figure(figsize=(15, 5))
 	colors = [cm(1) if c < 0 else cm(0) for c in coef[interesting_coefficients]]
 	plt.bar(np.arange(2 * n_top_features), coef[interesting_coefficients], color=colors)
