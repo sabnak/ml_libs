@@ -21,7 +21,7 @@ def visualize_classification(coefficients, feature_names, n_top_features=25, **k
 			positive) and smallest (most negative)  n_top_features coefficients,
 			for a total of 2 * n_top_features coefficients.
 	"""
-	params = dict(rotation=90, ha="right", fontsize=9)
+	params = dict(rotation=60, ha="right", fontsize=9)
 	params.update(kwargs)
 
 	coefficients = coefficients.squeeze()
@@ -49,6 +49,6 @@ def visualize_classification(coefficients, feature_names, n_top_features=25, **k
 	plt.bar(np.arange(2 * n_top_features), coef[interesting_coefficients], color=colors)
 	feature_names = np.array(feature_names)
 	plt.subplots_adjust(bottom=0.3)
-	plt.xticks(np.arange(1, 1 + 2 * n_top_features), feature_names[interesting_coefficients], **params)
+	plt.xticks(np.arange(0, 2 * n_top_features), feature_names[interesting_coefficients], **params)
 	plt.ylabel("Coefficient magnitude")
 	plt.xlabel("Feature")
