@@ -1,10 +1,22 @@
 from matplotlib import pyplot as plt
 import numpy as np
-import pandas as pd
 from collections import OrderedDict
 
 
-def visualize_relations(dataset, y, y_value_list=None, columns=None, n_cols=3, max_values=10, colors=None, **kwargs):
+def visualize_relations(dataset, y, y_value_list=None, columns=None, max_values=10, n_cols=3, colors=None, **kwargs):
+	"""
+	Visualize relations between class and categorical attributes
+
+	:param dataset: Pandas DataSet.
+	:param y: str. Class to exam
+	:param y_value_list: list or None. List of class values to exam. If None - exam all
+	:param columns: list or None. List of attributes to exam. If None - exam all
+	:param max_values: int. Max unique values of attributes to exam
+	:param n_cols: int. Columns in final plot
+	:param colors: dict or None. Color for each class value. If None - default
+	:param kwargs: dict. Additional plotting options
+	:return: None
+	"""
 	params = dict(rot=0)
 	params.update(kwargs)
 
@@ -59,7 +71,6 @@ def visualize_relations(dataset, y, y_value_list=None, columns=None, n_cols=3, m
 		ax.set_xticks(ind + width / 2)
 		ax.set_xticklabels(column_names)
 		plt.legend(plots, plots_names, fontsize=20)
-		# r.plot.bar(ax=ax, **params, fontsize=10, stacked=True)
 
 	plt.suptitle("{}: {}".format(y, y_value_list if y_value_list else "ALL"))
 
