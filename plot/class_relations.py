@@ -3,7 +3,7 @@ import numpy as np
 from collections import OrderedDict
 
 
-def visualize_relations(dataset, y, y_value_list=None, columns=None, max_values=10, n_cols=3, colors=None, **kwargs):
+def visualize_relations(dataset, y, y_value_list=None, columns=None, max_values=15, n_cols=3, colors=None, **kwargs):
 	"""
 	Visualize relations between class and categorical attributes
 
@@ -17,7 +17,7 @@ def visualize_relations(dataset, y, y_value_list=None, columns=None, max_values=
 	:param kwargs: dict. Additional plotting options
 	:return: None
 	"""
-	params = dict(rot=0)
+	params = dict(width=.35)
 	params.update(kwargs)
 
 	if not columns:
@@ -38,11 +38,8 @@ def visualize_relations(dataset, y, y_value_list=None, columns=None, max_values=
 			continue
 
 		groups = dict()
-		column_names = []
 
 		for (y_value, col_name), group_size in r.items():
-			if col_name not in column_names:
-				column_names.append(col_name)
 
 			if y_value_list and y_value not in y_value_list:
 				continue
@@ -53,23 +50,22 @@ def visualize_relations(dataset, y, y_value_list=None, columns=None, max_values=
 
 		plots = []
 		plots_names = []
-		ind = np.arange(len(column_names))
-		width = .35
+		ind = np.arange(len(unique_values))
 		offset = 0
 
 		for y_value, col in groups.items():
 			plots.append(ax.bar(
 				ind + offset,
 				col.values(),
-				width=.35,
 				color=None if not colors or y_value not in colors else colors[y_value],
-				label=column
+				label=column,
+				**params
 			))
-			offset += width
+			offset += params['width']
 			plots_names.append(y_value)
 
-		ax.set_xticks(ind + width / 2)
-		ax.set_xticklabels(column_names)
+		ax.set_xticks(ind + params['width'] / 2)
+		ax.set_xticklabels(unique_values)
 		plt.legend(plots, plots_names, fontsize=20)
 
 	plt.suptitle("{}: {}".format(y, y_value_list if y_value_list else "ALL"))
