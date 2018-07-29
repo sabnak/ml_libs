@@ -4,6 +4,7 @@ import urlextract
 
 url_extractor = urlextract.URLExtract()
 
+
 def html_to_plain_text(html):
 
 	replacement_list = [

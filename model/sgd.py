@@ -1,6 +1,4 @@
 from sklearn.base import clone
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import SGDRegressor
 
