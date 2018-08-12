@@ -54,7 +54,7 @@ class NumericalIntoGroupsSplitter(BaseEstimator, TransformerMixin):
 
 	"""
 
-	def __init__(self, n_groups, expand_X=True):
+	def __init__(self, n_groups, expand_X=False):
 
 		self.n_groups = n_groups
 		self.groups_ = []
@@ -64,13 +64,14 @@ class NumericalIntoGroupsSplitter(BaseEstimator, TransformerMixin):
 
 		for i, col in enumerate(X.T):
 
-			row_split = np.array_split(sorted(col), self.n_groups)
+			col_split = np.array_split(sorted(col), self.n_groups)
 
 			self.groups_.append([])
 
-			for x in row_split:
+			for x in col_split:
 				if not x.all():
 					break
+
 				self.groups_[i].append([x[0], x[-1]])
 
 			self.groups_[-1][0][0], self.groups_[-1][-1][1] = -float("inf"), float("inf")
@@ -81,30 +82,25 @@ class NumericalIntoGroupsSplitter(BaseEstimator, TransformerMixin):
 
 		new_array = np.empty_like(X)
 
-		for (row_i, cell_i), v in np.ndenumerate(X):
+		for (i, j), value in np.ndenumerate(X):
 
-			for space_index, space in enumerate(self.groups_[cell_i]):
+			for space_index, space in enumerate(self.groups_[j]):
 
-				if space[0] <= v <= space[1]:
-					new_array[row_i][cell_i] = space_index + 1  # avoid group 0
+				if space[0] <= value <= space[1]:
+					new_array[i][j] = space_index + 1  # avoid group 0
 					break
 
 		return np.c_[X, new_array] if self.expand_X else new_array
 
 
-def split_numerical_into_groups(X, **kwargs):
+def split_numerical_into_groups(X, *args, **kwargs):
 	"""
 	Syntax sugar for splitting 1-D array through NumericalIntoGroupsSplitter class
 
-	Parameters
-	----------
-	n_groups : int
-			Quantity of groups to split
-	expand_X : bool, optional
-			Expand or replace original X
+	See documentation for NumericalIntoGroupsSplitter
 	"""
 
-	_ = NumericalIntoGroupsSplitter(**kwargs)
+	_ = NumericalIntoGroupsSplitter(*args, **kwargs)
 
 	return _.fit_transform(np.reshape(X, (len(X), -1)))[:, 1:]
 
